@@ -1,5 +1,5 @@
 -- Gerado por Oracle SQL Developer Data Modeler 24.3.1.351.0831
---   em:        2025-07-17 13:29:32 BRT
+--   em:        2025-07-19 12:00:52 BRT
 --   site:      Oracle Database 21c
 --   tipo:      Oracle Database 21c
 
@@ -57,6 +57,9 @@ CREATE TABLE carts
     ) 
     LOGGING 
 ;
+
+ALTER TABLE carts 
+    ADD CONSTRAINT carts_PK PRIMARY KEY ( items_itm_id, users_usr_id ) ;
 
 CREATE TABLE categories 
     ( 
@@ -201,7 +204,8 @@ CREATE TABLE sales
      sal_date          DATE  NOT NULL , 
      sal_delivery_date DATE  NOT NULL , 
      sal_finished      CHAR (1)  NOT NULL , 
-     sal_usr_id        NUMBER (10)  NOT NULL , 
+     sal_customer_id   NUMBER (10)  NOT NULL , 
+     sal_seller_id     NUMBER (10)  NOT NULL , 
      sal_pty_id        NUMBER (10)  NOT NULL , 
      sal_add_id        NUMBER (10)  NOT NULL 
     ) 
@@ -506,6 +510,18 @@ ALTER TABLE sales
 ;
 
 ALTER TABLE sales 
+    ADD CONSTRAINT sal_customer_FK FOREIGN KEY 
+    ( 
+     sal_customer_id
+    ) 
+    REFERENCES users 
+    ( 
+     usr_id
+    ) 
+    NOT DEFERRABLE 
+;
+
+ALTER TABLE sales 
     ADD CONSTRAINT sal_pty_FK FOREIGN KEY 
     ( 
      sal_pty_id
@@ -518,9 +534,9 @@ ALTER TABLE sales
 ;
 
 ALTER TABLE sales 
-    ADD CONSTRAINT sal_usr_FK FOREIGN KEY 
+    ADD CONSTRAINT sal_seller_FK FOREIGN KEY 
     ( 
-     sal_usr_id
+     sal_seller_id
     ) 
     REFERENCES users 
     ( 
@@ -655,7 +671,7 @@ ALTER TABLE user_ratings
 -- 
 -- CREATE TABLE                            24
 -- CREATE INDEX                             0
--- ALTER TABLE                             51
+-- ALTER TABLE                             53
 -- CREATE VIEW                              0
 -- ALTER VIEW                               0
 -- CREATE PACKAGE                           0
